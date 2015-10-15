@@ -22,6 +22,7 @@ namespace SimpleMVCAuthentication.Modules
 
         public void Init(HttpApplication context)
         {
+            /* test */
             context.LogRequest += OnLogRequest;
             context.AuthenticateRequest += AuthenticateRequest;
 
