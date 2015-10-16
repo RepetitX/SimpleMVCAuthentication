@@ -14,7 +14,9 @@ namespace SimpleMVCAuthentication.Modules
 
         protected readonly string[] defaultIgnoredExtensions =
         {
-            ".js", ".css", ".png", ".woff2", ".jpg", ".jpeg", ".gif"
+            ".js", ".css", //resources
+            ".png", ".jpg", ".jpeg", ".gif", ".ico", ".svg", //images
+            ".woff2", ".woff", ".ttf", ".eot" //fonts
         };
 
         protected List<string> ignoredExtensions = new List<string>();
