@@ -43,9 +43,9 @@ namespace SimpleMVCAuthentication.Security
                 Context.User = user;
                 return user;
             }
-            SimpleAuthenticationTicket ticket = new SimpleAuthenticationTicket(cookie.Value);
+            SimpleAuthenticationTicket ticket = SimpleAuthenticationTicket.Decrypt(cookie.Value);
 
-            if (string.IsNullOrWhiteSpace(ticket.UserName))
+            if (ticket == null)
             {
                 //cookie испорчен
                 cookie.Expires = DateTime.Now;
@@ -110,7 +110,13 @@ namespace SimpleMVCAuthentication.Security
 
         protected void UpdateAuthCookie(HttpResponseBase Response, HttpCookie cookie)
         {
-            SimpleAuthenticationTicket ticket = new SimpleAuthenticationTicket(cookie.Value);
+            SimpleAuthenticationTicket ticket = SimpleAuthenticationTicket.Decrypt(cookie.Value);
+
+            if (ticket == null)
+            {
+                return;
+            }
+
             //Если KeepLoggedIn, то продляем
             if (ticket.KeepLoggedIn)
             {

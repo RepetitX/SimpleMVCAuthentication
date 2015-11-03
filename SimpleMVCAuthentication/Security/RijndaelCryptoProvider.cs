@@ -78,18 +78,25 @@ namespace SimpleMVCAuthentication.Security
             ICryptoTransform decryptor = rijndael.CreateDecryptor();
 
             // Create the streams used for decryption.
-            using (MemoryStream msDecrypt = new MemoryStream(encryptedObject))
+            try
             {
-                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                using (MemoryStream msDecrypt = new MemoryStream(encryptedObject))
                 {
-                    using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
 
-                        // Read the decrypted bytes from the decrypting stream
-                        // and place them in a string.
-                        serializedObject = srDecrypt.ReadToEnd();
+                            // Read the decrypted bytes from the decrypting stream
+                            // and place them in a string.
+                            serializedObject = srDecrypt.ReadToEnd();
+                        }
                     }
                 }
+            }
+            catch
+            {
+                return default(T);
             }
 
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
